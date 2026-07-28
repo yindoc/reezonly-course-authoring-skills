@@ -1,0 +1,4 @@
+interface:
+  display_name: "Создание курсов Reezonly"
+  short_description: "Проектирование и сборка курсов в Reezonly"
+  default_prompt: "Используй $reezonly-course-authoring, чтобы спроектировать и создать качественный курс в Reezonly LMS."
