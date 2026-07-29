@@ -27,14 +27,14 @@ Static manifest и resources — ориентиры для подготовки,
 
 ## Authority ответа
 
-| Класс | Разрешённое действие |
-| --- | --- |
-| Verified authoritative readback | Использовать exact ID/value только в его declared scope и только для следующего schema-authorized шага. |
-| Verified no-op | Считать состояние подтверждённым после required readback; не создавать duplicate. |
-| Candidate, observation, selector, ACK без required readback | Не считать owned и не использовать для mutation. Разрешён только явно опубликованный read/reconcile path. |
-| Pre-dispatch `rejected` (`mutationDispatches:0`) | Mutation не была отправлена. Исправить schema/input либо остановиться; не считать candidate/ACK authority. |
-| Declared `rejected` after dispatch | Это terminal server outcome, не unknown. Не выдавать target как owned и не переотправлять вслепую. |
-| `unknown` / transport ambiguity | Только здесь ожидать `retrySafe:false` и returned `nextAction`. Не resend; до любой новой mutation вызвать ровно все `nextAction.tools` в возвращённом порядке/shape. Не изобретать reconcile. |
+| Класс                                                       | Разрешённое действие                                                                                                                                                                           |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Verified authoritative readback                             | Использовать exact ID/value только в его declared scope и только для следующего schema-authorized шага.                                                                                        |
+| Verified no-op                                              | Считать состояние подтверждённым после required readback; не создавать duplicate.                                                                                                              |
+| Candidate, observation, selector, ACK без required readback | Не считать owned и не использовать для mutation. Разрешён только явно опубликованный read/reconcile path.                                                                                      |
+| Pre-dispatch `rejected` (`mutationDispatches:0`)            | Mutation не была отправлена. Исправить schema/input либо остановиться; не считать candidate/ACK authority.                                                                                     |
+| Declared `rejected` after dispatch                          | Это terminal server outcome, не unknown. Не выдавать target как owned и не переотправлять вслепую.                                                                                             |
+| `unknown` / transport ambiguity                             | Только здесь ожидать `retrySafe:false` и returned `nextAction`. Не resend; до любой новой mutation вызвать ровно все `nextAction.tools` в возвращённом порядке/shape. Не изобретать reconcile. |
 
 ## External `delete_once`
 
@@ -43,3 +43,9 @@ Ordinary owned cleanup и external `delete_once` — разные lanes. Не п
 Если current catalog публикует `lesson_authoring_prepare_existing_course_authority`, выполнить external delete только в exact sequence: prepare preview with `mode:'delete_once'` → verbatim fresh server confirmation in the same actor/session/run → returned server selector → exactly one direct `lesson_authoring_execute_cleanup` → authoritative absence. При отсутствии published tool/schema остановиться до mutation.
 
 После delete closed `lesson_authoring_get_course_content` ErrorEnvelope `NOT_FOUND` / `validation` / `rejected` / `retryable:false` with zero mutation — authoritative absence, не `unknown`; delete не повторять. Любой реальный unknown остаётся no-retry и требует exact returned `nextAction`.
+
+## Canonical structural delete
+
+Это отдельный conditional lane от ordinary owned `preview_cleanup` и external `delete_once`. Выполнять его только если actual `tools/list` публикует exact branch `lesson_authoring_delete_entity`; schema этой ветки — единственная authority. Для selected exact IDs перед dispatch получить fresh exact Course/parent chain и сверить current confirmation `action` и `entityId`. Сделать ровно один dispatch, затем подтвердить authoritative absence; `unknown` никогда не resend и разрешает только exact returned `nextAction`.
+
+Course branch допускается только для selected `courseId` с literal `delete_course`. Не выполнять client cascade и не добавлять ownership/grant/selector. Подтверждать отсутствие только через current authoritative course-index read path. Module/Lesson/Page/Block допустимы только по их exact published branch и fresh matching parent chain; не угадывать fallback или совместимость между branch.

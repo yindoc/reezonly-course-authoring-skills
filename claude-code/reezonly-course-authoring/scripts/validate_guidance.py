@@ -31,6 +31,49 @@ def main() -> int:
             failures.append("missing exact catalog-qualified Claude tool-name rule")
         if "не выдумывать mcp server prefix" not in skill or "mcp__" in skill:
             failures.append("Claude MCP prefix rule invalid")
+        structural = " ".join(
+            text(FILES[name]) for name in ("skill", "runtime-gate", "authoring-pipeline")
+        )
+        for term in (
+            "canonical structural delete",
+            "lesson_authoring_delete_entity",
+            "preview_cleanup",
+            "delete_once",
+            "parent chain",
+            "action",
+            "entityid",
+            "authoritative absence",
+            "unknown",
+            "nextaction",
+            "delete_course",
+            "course-index",
+            "client cascade",
+            "ownership/grant/selector",
+            "module/lesson/page/block",
+        ):
+            if term not in structural:
+                failures.append(f"missing canonical structural-delete term: {term}")
+        if "ровно один dispatch" not in structural and "exactly once" not in structural:
+            failures.append("canonical structural delete must require one dispatch")
+        catalog = text(FILES["block-catalog"])
+        for term in (
+            "webinar11",
+            "integration13",
+            "current rich-media schema",
+            "currently required `type` and `duration`",
+            "before dispatch",
+            "typed canonical readback",
+            "opaque extensions",
+            "copy server-owned opaque extensions into writes",
+            "authority",
+            "traverse",
+            "project",
+            "log",
+            "typed drift/error",
+            "guessed payload adaptation",
+        ):
+            if term not in catalog:
+                failures.append(f"missing Webinar opaque-safety term: {term}")
         if "raw course text, or block content in tool arguments, journals, or reports" in joined:
             failures.append("stale blanket educational-content tool-argument prohibition")
     if failures:

@@ -1,6 +1,6 @@
 ---
 name: reezonly-course-authoring
-description: "Проектировать и создавать качественные курсы в Reezonly LMS через MCP: от образовательного брифа и модульно-урочного blueprint до безопасной сборки, typed readback, QA, активации и публикации. Использовать при создании или переработке курса, модулей, уроков, семантических вкладок/страниц, Lesson Blocks и итоговой проверки в подключённом Reezonly LMS MCP."
+description: 'Проектировать и создавать качественные курсы в Reezonly LMS через MCP: от образовательного брифа и модульно-урочного blueprint до безопасной сборки, typed readback, QA, активации и публикации. Использовать при создании или переработке курса, модулей, уроков, семантических вкладок/страниц, Lesson Blocks и итоговой проверки в подключённом Reezonly LMS MCP.'
 ---
 
 # Создание курсов Reezonly
@@ -45,6 +45,8 @@ description: "Проектировать и создавать качестве�
 ## Очистка external Course
 
 Разделять ordinary owned cleanup и external `delete_once` как несовместимые lanes. Ordinary owned flow использует только опубликованный `preview_cleanup` flow. Для external Course не вызывать и не подменять им `preview_cleanup`, не запрашивать/не смешивать `full_access` с `delete_once` и не считать Course своим.
+
+Canonical structural delete — отдельный conditional lane, не ordinary cleanup и не external `delete_once`. Использовать его только если actual `tools/list` публикует точную ветку `lesson_authoring_delete_entity`. Для exact selected IDs сначала получить fresh exact Course/parent chain и сверить current confirmation `action` и `entityId`; затем сделать ровно один dispatch и подтвердить authoritative absence. Для Course допустима только literal `delete_course` ветка selected `courseId`: без client cascade, ownership/grant/selector и только с current authoritative course-index absence read. Module, Lesson, Page и Block удалять только через их exact опубликованные ветки. Любой `unknown` не resend: выполнить только exact returned `nextAction`.
 
 Для published `lesson_authoring_prepare_existing_course_authority` выполнить строго: `mode:'delete_once'` prepare preview → передать дословно fresh server confirmation в том же actor/session/run → взять только returned server selector → ровно один direct `lesson_authoring_execute_cleanup` → authoritative absence readback. Не конструировать selector, receipt или confirmation вручную. При unavailable tool/schema остановиться до delete.
 

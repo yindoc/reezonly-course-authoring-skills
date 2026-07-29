@@ -10,11 +10,11 @@
 
 ## Четыре semantic tabs
 
-| Tab | Назначение |
-| --- | --- |
-| Theory | Объяснение, worked example, decision rule |
-| Testing | Retrieval, диагностическая проверка, feedback |
-| Practice | Выполнение в контексте, artefact, разбор |
+| Tab       | Назначение                                     |
+| --------- | ---------------------------------------------- |
+| Theory    | Объяснение, worked example, decision rule      |
+| Testing   | Retrieval, диагностическая проверка, feedback  |
+| Practice  | Выполнение в контексте, artefact, разбор       |
 | Materials | Job aids и источники для повторного применения |
 
 Использовать baseline page каждой tab; additional page создавать только при смене учебной цели, activity или cognitive mode. Связывать title, practice и assessment с одним главным outcome урока. Использовать ясные headings, logical order, descriptive links, alt text и text alternative для media.

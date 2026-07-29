@@ -16,6 +16,7 @@ Use MCP tools and resources only. Never make direct LMS/service HTTP calls. Neve
 - Treat list/discovery output, candidates, partial output, ACKs, and selectors as observed, not owned.
 - An external existing Course is not ordinary bearer authority and must not be adopted. Use it only through the published `lesson_authoring_prepare_existing_course_authority` schema.
 - Keep `full_access` and `delete_once` as separate authority lanes. Never mix their inputs, receipts, or permissions.
+- Canonical structural delete is a separate conditional lane from ordinary owned `preview_cleanup` and external `delete_once`. Use it only when the live catalog publishes exact `lesson_authoring_delete_entity`: fresh-read the exact selected Course/parent chain, match current confirmation `action`/`entityId`, dispatch exactly once, then confirm authoritative absence. Course uses only selected `courseId` + literal `delete_course`, no client cascade or ownership/grant/selector, and the current authoritative course-index absence path. Module/Lesson/Page/Block use only their exact published branch. `unknown` is never resent; honour only its exact returned `nextAction`.
 
 ## Author deliberately
 
@@ -36,6 +37,8 @@ When the catalog publishes `lesson_authoring_prepare_existing_course_authority`,
 5. Confirm authoritative absence.
 
 Do not adopt the external Course, issue a second delete, or construct a cascade. After deletion, `lesson_authoring_get_course_content` may return a closed zero-mutation ErrorEnvelope: `NOT_FOUND`, `validation`, `rejected`, and `retryable:false`. That is authoritative absence, not `unknown`, and is never grounds to repeat delete.
+
+For Webinar11 and Integration13, use only the current rich-media schema. Before Webinar create, provide every current schema-required field, including `type` and `duration`; typed canonical readback is authority. Do not copy, use as authority, traverse, project, or log server-owned opaque extensions. Stop on typed drift/error; do not guess a payload adaptation.
 
 ## Interpret outcomes safely
 

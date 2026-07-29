@@ -1,6 +1,6 @@
 ---
 name: reezonly-course-authoring
-description: "Проектировать и создавать качественные курсы в Reezonly LMS через MCP: от образовательного брифа и модульно-урочного blueprint до безопасной сборки, typed readback, QA, активации и публикации. Использовать при создании или переработке курса, модулей, уроков, семантических вкладок/страниц, Lesson Blocks и итоговой проверки в подключённом Reezonly LMS MCP."
+description: 'Проектировать и создавать качественные курсы в Reezonly LMS через MCP: от образовательного брифа и модульно-урочного blueprint до безопасной сборки, typed readback, QA, активации и публикации. Использовать при создании или переработке курса, модулей, уроков, семантических вкладок/страниц, Lesson Blocks и итоговой проверки в подключённом Reezonly LMS MCP.'
 ---
 
 # Создание курсов Reezonly
@@ -25,6 +25,8 @@ description: "Проектировать и создавать качестве�
 ## Cleanup external Course
 
 Ordinary owned cleanup и external `delete_once` — несовместимые lanes. Не substitute external lane `preview_cleanup`, не adopt external Course, не mix `full_access`/`delete_once` и не construct selector/receipt/confirmation.
+
+Canonical structural delete — отдельный conditional lane, не cleanup substitute. Использовать его только если actual catalog публикует exact branch corresponding to `lesson_authoring_delete_entity`. Для selected exact IDs получить fresh exact Course/parent chain, сверить current confirmation `action`/`entityId`, сделать ровно один dispatch и read authoritative absence. Course допускает только selected `courseId` + literal `delete_course`: no client cascade, no ownership/grant/selector и absence только через current authoritative course-index read path. Module/Lesson/Page/Block — только exact published branch. `unknown` не resend; honour только exact returned `nextAction`.
 
 Если available catalog публикует operation corresponding to `lesson_authoring_prepare_existing_course_authority`, выполнить строго: prepare preview `delete_once` → verbatim fresh server confirmation same actor/session/run → returned server selector → exactly one direct operation corresponding to `lesson_authoring_execute_cleanup` → authoritative absence. Closed zero-mutation `NOT_FOUND`/`validation`/`rejected`/`retryable:false` после operation corresponding to `lesson_authoring_get_course_content` — authoritative absence, не unknown и не повод повторять delete. Genuine unknown не resend: honour exact returned `nextAction` в returned order/shape before any new mutation.
 

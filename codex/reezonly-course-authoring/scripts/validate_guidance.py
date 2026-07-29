@@ -31,6 +31,49 @@ def main() -> int:
             failures.append("stale blanket educational-content tool-argument prohibition")
         if "учебный content разрешён только в точных опубликованных mutation-полях" not in joined:
             failures.append("missing exact mutation-field content boundary")
+        structural = " ".join(
+            text(FILES[name]) for name in ("skill", "runtime-gate", "authoring-pipeline")
+        )
+        for term in (
+            "canonical structural delete",
+            "lesson_authoring_delete_entity",
+            "preview_cleanup",
+            "delete_once",
+            "fresh exact course/parent chain",
+            "action",
+            "entityid",
+            "authoritative absence",
+            "unknown",
+            "nextaction",
+            "delete_course",
+            "course-index",
+            "client cascade",
+            "ownership/grant/selector",
+            "module/lesson/page/block",
+        ):
+            if term not in structural:
+                failures.append(f"missing canonical structural-delete term: {term}")
+        if "ровно один dispatch" not in structural and "exactly once" not in structural:
+            failures.append("canonical structural delete must require one dispatch")
+        catalog = text(FILES["block-catalog"])
+        for term in (
+            "webinar11",
+            "integration13",
+            "current rich-media schema",
+            "currently required `type` и `duration`",
+            "до dispatch",
+            "typed canonical readback",
+            "opaque extensions",
+            "копировать в write",
+            "использовать как authority",
+            "traversировать",
+            "projectировать",
+            "логировать",
+            "typed drift/error",
+            "guessed payload adaptation",
+        ):
+            if term not in catalog:
+                failures.append(f"missing Webinar opaque-safety term: {term}")
     if failures:
         print("Guidance validation failed:", *[f"- {item}" for item in failures], sep="\n")
         return 1

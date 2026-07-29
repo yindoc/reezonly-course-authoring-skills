@@ -7,3 +7,5 @@
 5. Candidate/observation/selector remain non-owned. Genuine unknown has no resend: exact returned `nextAction` only.
 
 Cleanup is separately user-authorized. Ordinary owned cleanup is only `preview_cleanup`. External `delete_once` is only prepare preview → verbatim confirmation same actor/session/run → returned selector → exactly one direct execute cleanup → authoritative absence; no adoption, forged receipt, `full_access` mixing, or repeat after closed post-delete `NOT_FOUND`.
+
+Canonical structural delete is a separate conditional lane, never a cleanup substitute. Use it only when the actual catalog publishes the exact `lesson_authoring_delete_entity` branch. For selected exact IDs, fresh-read the exact Course/parent chain, match current confirmation `action`/`entityId`, dispatch exactly once, then read authoritative absence. Course allows only selected `courseId` + literal `delete_course`: no client cascade, ownership/grant/selector, and absence only through the current authoritative course-index read path. Module/Lesson/Page/Block use only their exact published branch. `unknown` has no resend: honour only the exact returned `nextAction`.
